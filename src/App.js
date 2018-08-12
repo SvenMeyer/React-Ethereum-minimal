@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+// import ReactExampleJSON from '../build/contracts/ReactExample.json';
 import './App.css';
 
 class App extends Component {
@@ -131,8 +132,12 @@ class App extends Component {
 		const MyContract = window.web3.eth.contract(ABI);
 
 		// deploy contract then insert address here
+		// contractState is added to React component state for controlled input,
+		// which is triggered anytime the user adds or delete in the input field
 		this.state = {
-			ContractInstance: MyContract.at("0xf25186b5081ff5ce73482ad761db0eb0d25abfbf")
+			ContractInstance: MyContract.at("0xf25186b5081ff5ce73482ad761db0eb0d25abfbf"),
+			/* Phase 3 -- Smart Contract State Manipulation */
+			contractState: ''
 		}
 
 		/* (line 45) Phase 2 */
@@ -140,6 +145,7 @@ class App extends Component {
 		the function must be bound to the component instance, which happens in the constructor. */
 		this.querySecret = this.querySecret.bind(this);
 		this.queryState  = this.queryState.bind(this);
+		this.handleContractStateSubmit = this.handleContractStateSubmit.bind(this);
 	}
 
 	/* Phase 2 */
@@ -170,7 +176,27 @@ class App extends Component {
 		})
 	}
 
+	/* Phase 3 */
+	handleContractStateSubmit(event) {
+		event.preventDefault();
+
+		const { setState } = this.state.ContractInstance;
+		const { contractState: newState } = this.state;
+
+		setState(
+			newState,
+			{
+				gas: 300000,
+				from: window.web3.eth.accounts[0],
+				value: window.web3.toWei(0.01, 'ether')
+			}, (err, result) => {
+				console.log('Smart contract state is changing.');
+			}
+		)
+	}
+
 	render() {
+		const link="https://medium.com/@zubairnahmed/https-medium-com-zubairnahmed-react-ethereum-getting-started-with-the-minimum-toolset-required-part-1-of-4-9562efa23d18";
 		return (
 			<div className="App">
 			
@@ -178,15 +204,28 @@ class App extends Component {
 					<img src={logo} className="App-logo" alt="logo" />
 					<h1 className="App-title">Welcome to React</h1>
 				</header>
+				<br /><br />
+
+				<button onClick={this.querySecret}>Get smart contract secret</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				
+				<button onClick={this.queryState}>Get smart contract STATE</button><br /><br />
+
+				{/* Phase 3 */}
+				<form onSubmit={this.handleContractStateSubmit}>
+					<input
+						type="text"
+						name="state-change"
+						placeholder="Enter new state..."
+						value={this.state.contractState}
+						onChange={event => this.setState({ contractState: event.target.value })} />
+					<button type="submit"> Submit </button>
+				</form>
+
 
 				<p className="App-intro">
-					To get started, edit <code>src/App.js</code> and save to reload.
+					More information on this tutorial project here:<br />
+					<a href={link}>{link}</a><br />
 				</p>
-
-				<button onClick={this.querySecret}>Get smart contract secret</button>
-				<br /><br />
-				<button onClick={this.queryState}>Get smart contract STATE</button>
-
 			</div>
 		);
 	}
