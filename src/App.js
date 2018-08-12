@@ -59,24 +59,24 @@ class App extends Component {
 				"type": "function"
 			},
 			{
+				"payable": true,
+				"stateMutability": "payable",
+				"type": "fallback"
+			},
+			{
 				"inputs": [],
 				"payable": false,
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
 			{
-				"payable": true,
-				"stateMutability": "payable",
-				"type": "fallback"
-			},
-			{
 				"constant": true,
 				"inputs": [],
-				"name": "getSecret",
+				"name": "getBalance",
 				"outputs": [
 					{
 						"name": "",
-						"type": "string"
+						"type": "uint256"
 					}
 				],
 				"payable": false,
@@ -135,29 +135,29 @@ class App extends Component {
 		// contractState is added to React component state for controlled input,
 		// which is triggered anytime the user adds or delete in the input field
 		this.state = {
-			ContractInstance: MyContract.at("0xf25186b5081ff5ce73482ad761db0eb0d25abfbf"),
+			ContractInstance: MyContract.at("0xeec918d74c746167564401103096d45bbd494b74"),
 			/* Phase 3 -- Smart Contract State Manipulation */
 			contractState: ''
 		}
 
-		/* Binds querySecret. Anytime the *this* keyword is used in a function inside a class-based React component,
+		/* Binds getBalance. Anytime the *this* keyword is used in a function inside a class-based React component,
 		the function must be bound to the component instance, which happens in this constructor. */
-		this.querySecret = this.querySecret.bind(this);
+		this.getContractBalance = this.getContractBalance.bind(this);
 		this.queryState  = this.queryState.bind(this);
 		this.handleContractStateSubmit = this.handleContractStateSubmit.bind(this);
 	}
 
 	/* Phase 2 */
-	querySecret() {
+	getContractBalance() {
 		/* Deconstructs the getSecret function into its own variable from the ContractInstance object.
 		All functions from thr contract will be available on the ContractInstance object. */
-		const { getSecret } = this.state.ContractInstance;
+		const { getBalance } = this.state.ContractInstance;
 
 		/* Invokes the getSecret function with a callback.
 		If there are no errors, the smart contract’s secret string will be logged in our browser. */
-		getSecret((err, secret) => {
-			if (err) console.error('An error occured::::', err);
-			console.log('This is our contract\'s secret::::', secret);
+		getBalance((err, balance) => {
+			if (err) console.error('An error occured : ', err);
+			console.log('This is the contracts balance : ', balance);
 		})
 	}
 	
@@ -209,7 +209,7 @@ class App extends Component {
 				</header>
 				<br /><br />
 
-				<button onClick={this.querySecret}>Get smart contract secret</button>&nbsp;&nbsp;&nbsp;&nbsp;
+				<button onClick={this.getContractBalance}>Get smart contract BALANCE</button>&nbsp;&nbsp;&nbsp;&nbsp;
 				
 				<button onClick={this.queryState}>Get smart contract STATE</button><br /><br />
 

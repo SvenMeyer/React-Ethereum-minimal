@@ -18,7 +18,7 @@ contract ReactExample {
 	// Phase 1
 	string public you_awesome;
 	// Phase 2
-	string private secret;
+//	string private secret;
 	// Phase 3
 	string private state;
 	// Phase 4
@@ -47,8 +47,8 @@ contract ReactExample {
 
 	// Phase 2
 	// Get some secret data from contract
-	function getSecret () public view returns (string) {
-		return secret;
+	function getBalance () public view returns (uint256) {
+		return address(this).balance;
 	}
 
 	// Phase 3
@@ -78,6 +78,6 @@ contract ReactExample {
 	// Phase 0
 	// Fallback function in case someone sends ether to this contract
 	function () public payable {
-		revert ();
+//		revert ();
 	}
 }
