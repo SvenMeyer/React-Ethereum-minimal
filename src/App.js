@@ -126,25 +126,47 @@ class App extends Component {
 		];
 
 		const MyContract = window.web3.eth.contract(ABI);
-		
+
+		// deploy contract then insert address here
 		this.state = {
-			ContractInstance: MyContract.at("0xf25186b5081ff5ce73482ad761db0eb0d25abfbf") // deploy contract - insert address here
+			ContractInstance: MyContract.at("0xf25186b5081ff5ce73482ad761db0eb0d25abfbf")
 		}
+
+		/* (line 45) Phase 2 */
+		/* Binds querySecret. Anytime the this keyword is used in a function inside a class-based React component,
+		the function must be bound to the component instance, which happens in the constructor. */
+		this.querySecret = this.querySecret.bind(this);
+	}
+
+	/* Phase 2 */
+	querySecret() {
+		/* Deconstructs the getSecret function into its own variable from the ContractInstance object.
+		All functions from thr contract will be available on the ContractInstance object. */
+		const { getSecret } = this.state.ContractInstance;
+
+		/* Invokes the getSecret function with a callback.
+		If there are no errors, the smart contract’s secret string will be logged in our browser. */
+		getSecret((err, secret) => {
+			if (err) console.error('An error occured::::', err);
+			console.log('This is our contract\'s secret::::', secret);
+		})
 	}
 	
 	render() {
 		return (
 			<div className="App">
+			
 				<header className="App-header">
 					<img src={logo} className="App-logo" alt="logo" />
 					<h1 className="App-title">Welcome to React</h1>
 				</header>
+
 				<p className="App-intro">
 					To get started, edit <code>src/App.js</code> and save to reload.
 				</p>
-				<p className="App-intro">
-					{JSON.stringify({n:1})}
-				</p>
+
+				<button onClick={this.querySecret}>Get smart contract secret</button>
+
 			</div>
 		);
 	}
