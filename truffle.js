@@ -12,7 +12,18 @@
  *   },
  */
 
+
+// See <http://truffleframework.com/docs/advanced/configuration>
+// to customize your Truffle configuration!
 module.exports = {
-  // See <http://truffleframework.com/docs/advanced/configuration>
-  // to customize your Truffle configuration!
+  // port: 7545 - ganache GUI
+  // port: 8545 - ganache CLI
+  // port: 9545 - truffle develop (Truffle's built-in personal blockchain) 
+  networks: {
+    development: {
+      host: "127.0.0.1",
+      port: 7545,
+      network_id: "*" // Match any network id
+    }
+  }
 };
