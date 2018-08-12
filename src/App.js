@@ -140,9 +140,8 @@ class App extends Component {
 			contractState: ''
 		}
 
-		/* (line 45) Phase 2 */
-		/* Binds querySecret. Anytime the this keyword is used in a function inside a class-based React component,
-		the function must be bound to the component instance, which happens in the constructor. */
+		/* Binds querySecret. Anytime the *this* keyword is used in a function inside a class-based React component,
+		the function must be bound to the component instance, which happens in this constructor. */
 		this.querySecret = this.querySecret.bind(this);
 		this.queryState  = this.queryState.bind(this);
 		this.handleContractStateSubmit = this.handleContractStateSubmit.bind(this);
@@ -180,8 +179,12 @@ class App extends Component {
 	handleContractStateSubmit(event) {
 		event.preventDefault();
 
-		const { setState } = this.state.ContractInstance;
-		const { contractState: newState } = this.state;
+		const { setState } = this.state.ContractInstance; // setState : function
+		console.log({ setState });
+		const { contractState: newState } = this.state;   // newState : string
+		console.log({ newState });
+//		const { newState2 } = this.state.contractState;   // why not this way ? ... undefned - why?
+//		console.log({ newState2 });
 
 		setState(
 			newState,
