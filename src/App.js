@@ -6,6 +6,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		
+		// this is the ABI for the contract, get it from Remix details page
 		const ABI = [
 			{
 				"anonymous": false,
@@ -125,6 +126,8 @@ class App extends Component {
 			}
 		];
 
+		// get the web3 object injected by MetaMask
+		// TODO: add support for truffle / local web3
 		const MyContract = window.web3.eth.contract(ABI);
 
 		// deploy contract then insert address here
@@ -136,6 +139,7 @@ class App extends Component {
 		/* Binds querySecret. Anytime the this keyword is used in a function inside a class-based React component,
 		the function must be bound to the component instance, which happens in the constructor. */
 		this.querySecret = this.querySecret.bind(this);
+		this.queryState  = this.queryState.bind(this);
 	}
 
 	/* Phase 2 */
@@ -152,6 +156,20 @@ class App extends Component {
 		})
 	}
 	
+	/* Phase 3 */
+	queryState() {
+		/* Deconstructs the getSecret function into its own variable from the ContractInstance object.
+		All functions from thr contract will be available on the ContractInstance object. */
+		const { getState } = this.state.ContractInstance;
+
+		/* Invokes the getState function with a callback.
+		If there are no errors, the smart contract’s secret string will be logged in our browser. */
+		getState((err, state) => {
+			if (err) console.error('An error occured : ', err);
+			console.log('This is our contract\'s STATE : ', state);
+		})
+	}
+
 	render() {
 		return (
 			<div className="App">
@@ -166,6 +184,8 @@ class App extends Component {
 				</p>
 
 				<button onClick={this.querySecret}>Get smart contract secret</button>
+				<br /><br />
+				<button onClick={this.queryState}>Get smart contract STATE</button>
 
 			</div>
 		);
