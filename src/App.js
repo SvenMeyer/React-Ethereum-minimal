@@ -145,6 +145,11 @@ class App extends Component {
 		this.getContractBalance = this.getContractBalance.bind(this);
 		this.queryState  = this.queryState.bind(this);
 		this.handleContractStateSubmit = this.handleContractStateSubmit.bind(this);
+		/* Phase 4 -- Conditionals on Smart Contract */
+		this.queryConditionResult = this.queryConditionResult.bind(this);
+		this.activateExperiment = this.activateExperiment.bind(this);
+
+		this.state.event = this.state.ContractInstance.ExperimentComplete();
 	}
 
 	/* Phase 2 */
@@ -198,8 +203,39 @@ class App extends Component {
 		)
 	}
 
+	/* Phase 4 */
+	queryConditionResult() {
+		const { pseudoRandomResult } = this.state.ContractInstance;
+
+		pseudoRandomResult((err, result) => {
+			console.log('This is the smart contract conditional::::', result);
+		})
+	}
+
+	/* Phase 4 */
+	activateExperiment() {
+		const { setExperimentInMotion } = this.state.ContractInstance;
+
+		setExperimentInMotion({
+			gas: 300000,
+			from: window.web3.eth.accounts[0],
+			value: window.web3.toWei(0.01, 'ether')
+		}, (err, result) => {
+			console.log('Experiment to determine true or false set in motion.');
+		})
+	}
+
 	render() {
 		const link="https://medium.com/@zubairnahmed/https-medium-com-zubairnahmed-react-ethereum-getting-started-with-the-minimum-toolset-required-part-1-of-4-9562efa23d18";
+		
+		/* Phase 4 */
+		// Code living in the render () function to be executed once event is received by React.
+		this.state.event.watch((err, event) => {
+			if (err) console.error('An error occured::::', err);
+			console.log('This is the event::::', event);
+			console.log('This is the experiment result::::', event.args.result);
+		});
+
 		return (
 			<div className="App">
 			
@@ -224,6 +260,13 @@ class App extends Component {
 					<button type="submit"> Submit </button>
 				</form>
 
+				{/* Phase 4 */}
+				<br />
+				<br />
+				<button onClick={this.queryConditionResult}> Query Smart Contract Conditional Result </button>
+				<br />
+				<br />
+				<button onClick={this.activateExperiment}> Start Experiment on Smart Contract </button>
 
 				<p className="App-intro">
 					More information on this tutorial project here:<br />

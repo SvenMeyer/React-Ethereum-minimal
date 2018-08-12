@@ -33,7 +33,7 @@ contract ReactExample {
 		// Phase 1
 		you_awesome = "You are awesome!";
 		// Phase 2
-		secret = "secret data";
+//		secret = "secret data";
 		// Phase 3
 		state = "Initial state";
 	}
@@ -46,7 +46,7 @@ contract ReactExample {
 	}
 
 	// Phase 2
-	// Get some secret data from contract
+	// Get balance of contract
 	function getBalance () public view returns (uint256) {
 		return address(this).balance;
 	}
